@@ -30,7 +30,7 @@ DEPS = $(OBJECTS:.o=.d)
 COMPILE_FLAGS = -std=c++11 -Wall -Wextra -g
 INCLUDES = -I include/ -I /usr/local/include
 # Space-separated pkg-config libraries used by this project
-LIBS = -lGLU -lGL -lglut
+LIBS = -lGLU -lGL -lglut -lfmt
 
 .PHONY: default_target
 default_target: release

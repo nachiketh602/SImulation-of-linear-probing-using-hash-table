@@ -82,7 +82,8 @@ void Cell::display() {
   }
   renderRectangle(this->x, this->y, this->width, this->height);
   if (this->data == "" || this->data == "-1") {
-    scanfill(this->x, this->y, this->width, this->height);
+    // scanfill(this->x, this->y, this->width, this->height);
+    ;
   } else {
     renderText(this->data, this->x, this->y);
   }

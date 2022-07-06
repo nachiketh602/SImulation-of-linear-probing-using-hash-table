@@ -19,12 +19,4 @@ public:
   void setText(string text);
   void clearText();
 };
-class Row {
-  Cell **cells;
-
-public:
-  Row(int n) { cells = new Cell *[n]; }
-  void setCell(int i, Cell *cell) { this->cells[i] = cell; }
-  Cell *getCell(int i) { return this->cells[i]; }
-};
 #endif // GRAPHICS_H_

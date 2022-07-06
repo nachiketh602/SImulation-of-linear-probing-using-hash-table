@@ -1,8 +1,8 @@
 #include "graphics.hpp"
 #include "hashtable.hpp"
 #include <GL/glut.h>
+#include <fmt/color.h>
 Cell *cells[10][3];
-Row *rows[10];
 HashMap *h;
 
 void simWindow();
@@ -16,9 +16,6 @@ void idle() { display(); }
 int main(int argc, char **argv) {
   glutInit(&argc, argv);
   h = new HashMap;
-  for (int i = 0; i < 10; i++) {
-    rows[i] = new Row(3);
-  }
   for (int i = 0, y = 10; i < 10; i++, y += 48) {
     cells[i][0] = new Cell(10, y, 50, 40, "");
     cells[i][1] = new Cell(70, y, 173, 40, "");
@@ -29,15 +26,21 @@ int main(int argc, char **argv) {
   }
   thread simulation(&simWindow);
   while (true) {
-    int ch;
-    cout << "===MENU===" << endl;
-    cout << "1.Insert" << endl;
-    cout << "2.Delete" << endl;
-    cout << "3.Display" << endl;
-    cout << "4.exit" << endl;
-    cout << "Enter your choice : ";
+    string ch;
+    cout << "\n\n";
+    fmt::print(fg(fmt::color::floral_white) | fmt::emphasis::bold,
+               "===MENU===\n1.Insert\n2.Delete\n3.Display\n4.Exit\nEnter your "
+               "choice : ");
     cin >> ch;
-    switch (ch) {
+    int val = atoi(ch.data());
+    cout << "\n\n";
+    if (val <= 0 || val > 4) {
+      fmt::print(fg(fmt::color::yellow) | fmt::emphasis::bold,
+                 "[WARN] Not a valid choice (VALID CHOICE RANGES FROM 1-4)");
+      cout << "\n\n";
+      continue;
+    }
+    switch (val) {
     case 1: {
       string key;
       int value;

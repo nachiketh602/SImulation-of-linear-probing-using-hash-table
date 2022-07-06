@@ -1,5 +1,5 @@
 #include "hashtable.hpp"
-
+#include <fmt/color.h>
 HashNode::HashNode(string key, int value) {
   this->value = value;
   this->key = key;
@@ -16,38 +16,57 @@ unsigned int HashMap::hashCode(string key) { return key.length() % capacity; }
 void HashMap::insertNode(Cell *cells[10][3], string key, int value) {
   HashNode *temp = new HashNode(key, value);
   int hashIndex = hashCode(key);
-  cells[hashIndex][0]->hightlighted(true);
-  cells[hashIndex][1]->hightlighted(true);
-  cells[hashIndex][2]->hightlighted(true);
   for (int i = 0; i < capacity; i++) {
-    cells[i][0]->hightlighted(true);
-    cells[i][1]->hightlighted(true);
-    cells[i][2]->hightlighted(true);
-    sleep(3);
+    this->init(cells);
     int next = (i + hashIndex) % capacity;
-    if (arr[next] == NULL) {
+    cells[next][0]->hightlighted(true);
+    cells[next][1]->hightlighted(true);
+    cells[next][2]->hightlighted(true);
+    sleep(1);
+    if (arr[next] == NULL || arr[next]->key == key) {
       arr[next] = temp;
-      cout << value << " is inserted at " << next << endl;
+      fmt::print(fg(fmt::color::pale_green) | fmt::emphasis::bold,
+                 "[INFO] {} is inserted at index {} for key {}\n", value, next,
+                 key);
       this->init(cells);
+      cells[next][0]->hightlighted(false);
+      cells[next][1]->hightlighted(false);
+      cells[next][2]->hightlighted(false);
       return;
     }
-    cells[i][0]->hightlighted(false);
-    cells[i][1]->hightlighted(false);
-    cells[i][2]->hightlighted(false);
+    cells[next][0]->hightlighted(false);
+    cells[next][1]->hightlighted(false);
+    cells[next][2]->hightlighted(false);
   }
 }
 
 int HashMap::deleteNode(Cell *cells[10][3], string key) {
   int hashIndex = hashCode(key);
+  int count = 0;
   for (int i = 0; i < capacity; i++) {
     int next = (i + hashIndex) % capacity;
+    cells[next][0]->hightlighted(true);
+    cells[next][1]->hightlighted(true);
+    cells[next][2]->hightlighted(true);
+    sleep(1);
     if (arr[next] != NULL && arr[next]->key == key) {
       int temp = arr[next]->value;
       arr[next] = NULL;
+      fmt::print(fg(fmt::color::pale_green) | fmt::emphasis::bold,
+                 "[INFO] {} is deleted from index {} for key {}\n", temp, next,
+                 key);
       this->init(cells);
+      cells[next][0]->hightlighted(false);
+      cells[next][1]->hightlighted(false);
+      cells[next][2]->hightlighted(false);
       return temp;
     }
+    cells[next][0]->hightlighted(false);
+    cells[next][1]->hightlighted(false);
+    cells[next][2]->hightlighted(false);
   }
+  fmt::print(fg(fmt::color::red) | fmt::emphasis::bold,
+             "[INFO] {} does not exist in HashTable \n", key);
   return (int)NULL;
 }
 
