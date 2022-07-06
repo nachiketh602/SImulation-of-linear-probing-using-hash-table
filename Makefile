@@ -3,7 +3,7 @@
 #
 # @file
 # @version 0.1
-CXX ?= g++
+CXX = g++
 
 # path #
 SRC_PATH = src

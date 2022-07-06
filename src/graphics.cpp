@@ -70,23 +70,28 @@ Cell::Cell(int x, int y, int width, int height, string data) {
   this->width = width;
   this->height = height;
   this->data = data;
-  this->is_highlighted = false;
+  this->isHighlighted = false;
+  this->isBordered = true;
 }
 
 Cell::Cell(string data) { this->data = data; }
 
 void Cell::display() {
-  if (this->is_highlighted) {
-    glColor3f(0.0, 1.0, 0.0);
+  if (this->isHighlighted) {
+    glColor3ub(255, 0, 0);
   }
   renderRectangle(this->x, this->y, this->width, this->height);
   if (this->data == "" || this->data == "-1") {
     scanfill(this->x, this->y, this->width, this->height);
+  } else {
+    renderText(this->data, this->x, this->y);
   }
-  renderText(this->data, this->x, this->y);
-  glColor3f(1.0, 1.0, 1.0);
-  // this->is_highlighted = false;
+  glColor3ub(255, 255, 255);
 }
-void Cell::print() { cout << this->data << endl; }
-void Cell::hightlight(bool val) { this->is_highlighted = val; }
+void Cell::print() {
+  cout << this->data << " at " << this->x << " and " << this->y << endl;
+}
+void Cell::hightlighted(bool val) { this->isHighlighted = val; }
+void Cell::bordered(bool val) { this->isBordered = val; }
 void Cell::setText(string text) { this->data = text; }
+void Cell::clearText() { this->data = ""; }

@@ -5,60 +5,53 @@ HashNode::HashNode(string key, int value) {
   this->key = key;
 }
 HashMap::HashMap() {
-  // Initial capacity of hash array
   capacity = 10;
   size = 0;
   arr = new HashNode *[capacity];
-  // Initialise all elements of array as NULL
   for (int i = 0; i < capacity; i++)
     arr[i] = NULL;
-  // dummy node with value and key -1
-  dummy = new HashNode("-1", -1);
 }
-// This implements hash function to find index
-// for a key
-//
 unsigned int HashMap::hashCode(string key) { return key.length() % capacity; }
 
-// Function to add key value pair
-void HashMap::insertNode(string key, int value) {
+void HashMap::insertNode(Cell *cells[10][3], string key, int value) {
   HashNode *temp = new HashNode(key, value);
-  // Apply hash function to find index for given key
   int hashIndex = hashCode(key);
-  // find next free space
+  cells[hashIndex][0]->hightlighted(true);
+  cells[hashIndex][1]->hightlighted(true);
+  cells[hashIndex][2]->hightlighted(true);
   for (int i = 0; i < capacity; i++) {
+    cells[i][0]->hightlighted(true);
+    cells[i][1]->hightlighted(true);
+    cells[i][2]->hightlighted(true);
+    sleep(3);
     int next = (i + hashIndex) % capacity;
-    // cout << next << " = " << i << "+" << hashIndex << "%" << capacity <<
-    // endl;
     if (arr[next] == NULL) {
       arr[next] = temp;
-      // cout << value << " is inserted at " << next << endl;
+      cout << value << " is inserted at " << next << endl;
+      this->init(cells);
       return;
     }
+    cells[i][0]->hightlighted(false);
+    cells[i][1]->hightlighted(false);
+    cells[i][2]->hightlighted(false);
   }
 }
 
-// Function to delete a key value pair
-int HashMap::deleteNode(string key) {
-  // Apply hash function
-  // to find index for given key
+int HashMap::deleteNode(Cell *cells[10][3], string key) {
   int hashIndex = hashCode(key);
   for (int i = 0; i < capacity; i++) {
     int next = (i + hashIndex) % capacity;
     if (arr[next] != NULL && arr[next]->key == key) {
       int temp = arr[next]->value;
       arr[next] = NULL;
+      this->init(cells);
       return temp;
     }
   }
-  // If not found return null
   return (int)NULL;
 }
 
-// Function to search the value for a given key
-int HashMap::get(string key) {
-  // Apply hash function
-  // to find index for given key
+int HashMap::get(Cell *cells[10][3], string key) {
   int hashIndex = hashCode(key);
   for (int i = 0; i < capacity; i++) {
     int next = (i + hashIndex) % capacity;
@@ -66,17 +59,13 @@ int HashMap::get(string key) {
       return arr[next]->value;
     }
   }
-  // If not found return null
   return (int)NULL;
 }
 
-// Return current size
 int HashMap::sizeofMap() { return size; }
 
-// Return true if size is 0
 bool HashMap::isEmpty() { return size == 0; }
 
-// Function to display the stored key value pairs
 void HashMap::display() {
   for (int i = 0; i < capacity; i++) {
     if (arr[i] != NULL && arr[i]->key != "-1")
@@ -94,4 +83,17 @@ int HashMap::getValue(int index) {
     return -1;
   }
   return arr[index]->value;
+}
+void HashMap::init(Cell *cells[10][3]) {
+  for (int i = 0; i < 10; i++) {
+    cells[i][0]->clearText();
+    cells[i][1]->clearText();
+    cells[i][2]->clearText();
+    if (this->arr[i] == NULL) {
+      continue;
+    }
+    cells[i][0]->setText(to_string(i));
+    cells[i][1]->setText(this->arr[i]->key);
+    cells[i][2]->setText(to_string(this->arr[i]->value));
+  }
 }

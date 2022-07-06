@@ -8,34 +8,25 @@ public:
   int value;
   std::string key;
 
-  // Constructor of hashnode
   HashNode(std::string key, int value);
 };
 
 class HashMap {
-  // hash element array
   HashNode **arr;
+  Cell *cells[10][3];
   int capacity;
-  // current size
   int size;
-  // dummy node
-  HashNode *dummy;
 
 public:
   HashMap();
   unsigned int hashCode(std::string key);
-  // Function to add key value pair
-  void insertNode(std::string key, int value);
-  // Function to delete a key value pair
-  int deleteNode(std::string key);
-  // Function to search the value for a given key
-  int get(std::string key);
-  // Return current size
+  void insertNode(Cell *cells[10][3], std::string key, int value);
+  int deleteNode(Cell *cells[10][3], std::string key);
+  int get(Cell *cells[10][3], std::string key);
   int sizeofMap();
-  // Return true if size is 0
   bool isEmpty();
-  // Function to display the stored key value pairs
   void display();
+  void init(Cell *cells[10][3]);
   string getKey(int index);
   int getValue(int index);
 };
