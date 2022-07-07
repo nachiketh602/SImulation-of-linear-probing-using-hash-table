@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
     string ch;
     cout << "\n\n";
     fmt::print(fg(fmt::color::floral_white) | fmt::emphasis::bold,
-               "===MENU===\n1.Insert\n2.Delete\n3.Display\n4.Exit\nEnteryour"
+               "===MENU===\n1.Insert\n2.Delete\n3.Display\n4.Exit\nEnter your "
                "choice : ");
     cin >> ch;
     int val = atoi(ch.data());
