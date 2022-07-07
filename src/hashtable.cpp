@@ -13,18 +13,47 @@ HashMap::HashMap() {
 }
 unsigned int HashMap::hashCode(string key) { return key.length() % capacity; }
 
-void HashMap::insertNode(Cell *cells[10][3], string key, int value) {
+void HashMap::insertNode(Cell *cells[10][4], string key, int value) {
   HashNode *temp = new HashNode(key, value);
   int hashIndex = hashCode(key);
+  int lastIndex;
   for (int i = 0; i < capacity; i++) {
     this->init(cells);
     int next = (i + hashIndex) % capacity;
+    lastIndex = next;
     cells[next][0]->hightlighted(true);
     cells[next][1]->hightlighted(true);
     cells[next][2]->hightlighted(true);
-    sleep(1);
-    if (arr[next] == NULL || arr[next]->key == key) {
+    cells[next][3]->setText("<[LOG] isNull || KeyMatch");
+    sleep(SIM_INTERVAL);
+    cells[next][3]->setText("<[LOG] isNull = ?");
+    sleep(SIM_INTERVAL);
+    if (arr[next] == NULL) {
+      cells[next][3]->setText("<[LOG] isNull = true");
+      sleep(SIM_INTERVAL);
       arr[next] = temp;
+      fmt::print(fg(fmt::color::pale_green) | fmt::emphasis::bold,
+                 "[INFO] {} is inserted at index {} for key {}\n", value, next,
+                 key);
+      this->init(cells);
+      cells[next][3]->setText("<[INFO] Inserted");
+      sleep(SIM_INTERVAL);
+
+      cells[next][0]->hightlighted(false);
+      cells[next][1]->hightlighted(false);
+      cells[next][2]->hightlighted(false);
+      return;
+    }
+    cells[next][3]->setText("<[LOG] isNull = false");
+    sleep(SIM_INTERVAL);
+    cells[next][3]->setText("<[LOG] isKeyMatched = ?");
+    sleep(SIM_INTERVAL);
+    if (arr[next]->key == key) {
+      cells[next][3]->setText("<[LOG] isKeyMatched = true");
+      sleep(SIM_INTERVAL);
+      arr[next] = temp;
+      cells[next][3]->setText("<[INFO] Inserted");
+      sleep(SIM_INTERVAL);
       fmt::print(fg(fmt::color::pale_green) | fmt::emphasis::bold,
                  "[INFO] {} is inserted at index {} for key {}\n", value, next,
                  key);
@@ -34,37 +63,65 @@ void HashMap::insertNode(Cell *cells[10][3], string key, int value) {
       cells[next][2]->hightlighted(false);
       return;
     }
+    cells[next][3]->setText("<[LOG] isKeyMatched = false");
+    sleep(SIM_INTERVAL);
     cells[next][0]->hightlighted(false);
     cells[next][1]->hightlighted(false);
     cells[next][2]->hightlighted(false);
   }
+  cells[lastIndex][3]->setText("<[INFO] Table Full");
+  fmt::print(fg(fmt::color::red) | fmt::emphasis::bold,
+             "[INFO] Table Is Full, value cannot be inserted.");
 }
 
-int HashMap::deleteNode(Cell *cells[10][3], string key) {
+int HashMap::deleteNode(Cell *cells[10][4], string key) {
   int hashIndex = hashCode(key);
-  int count = 0;
+  int lastIndex;
   for (int i = 0; i < capacity; i++) {
+    this->init(cells);
     int next = (i + hashIndex) % capacity;
+    lastIndex = next;
     cells[next][0]->hightlighted(true);
     cells[next][1]->hightlighted(true);
     cells[next][2]->hightlighted(true);
-    sleep(1);
-    if (arr[next] != NULL && arr[next]->key == key) {
-      int temp = arr[next]->value;
-      arr[next] = NULL;
-      fmt::print(fg(fmt::color::pale_green) | fmt::emphasis::bold,
-                 "[INFO] {} is deleted from index {} for key {}\n", temp, next,
-                 key);
+    cells[next][3]->setText("<[LOG] isNotNull && KeyMatch");
+    sleep(SIM_INTERVAL);
+    cells[next][3]->setText("<[LOG] isNotNull = ?");
+    sleep(SIM_INTERVAL);
+    if (arr[next] != NULL) {
+      cells[next][3]->setText("<[LOG] isNotNull = true");
+      sleep(SIM_INTERVAL);
+
+      cells[next][3]->setText("<[LOG] isKeyMatched = ?");
+      sleep(SIM_INTERVAL);
       this->init(cells);
-      cells[next][0]->hightlighted(false);
-      cells[next][1]->hightlighted(false);
-      cells[next][2]->hightlighted(false);
-      return temp;
+      if (arr[next]->key == key) {
+        cells[next][3]->setText("<[LOG] isKeyMatched = true");
+        sleep(SIM_INTERVAL);
+        int temp = arr[next]->value;
+        arr[next] = NULL;
+        fmt::print(fg(fmt::color::pale_green) | fmt::emphasis::bold,
+                   "[INFO] {} is deleted from index {} for key {}\n", temp,
+                   next, key);
+        this->init(cells);
+        cells[next][3]->setText("<[INFO] Deleted");
+        sleep(SIM_INTERVAL);
+        cells[next][0]->hightlighted(false);
+        cells[next][1]->hightlighted(false);
+        cells[next][2]->hightlighted(false);
+        return temp;
+      }
+      cells[next][3]->setText("<[LOG] isKeyMatched = false");
+      sleep(SIM_INTERVAL);
+    } else {
+      cells[next][3]->setText("<[LOG] isNotNull = false");
+      sleep(SIM_INTERVAL);
     }
     cells[next][0]->hightlighted(false);
     cells[next][1]->hightlighted(false);
     cells[next][2]->hightlighted(false);
   }
+  cells[lastIndex][3]->setText("<[INFO] Key not found");
   fmt::print(fg(fmt::color::red) | fmt::emphasis::bold,
              "[INFO] {} does not exist in HashTable \n", key);
   return (int)NULL;
@@ -103,11 +160,12 @@ int HashMap::getValue(int index) {
   }
   return arr[index]->value;
 }
-void HashMap::init(Cell *cells[10][3]) {
+void HashMap::init(Cell *cells[10][4]) {
   for (int i = 0; i < 10; i++) {
     cells[i][0]->clearText();
     cells[i][1]->clearText();
     cells[i][2]->clearText();
+    cells[i][3]->setText(" ");
     if (this->arr[i] == NULL) {
       continue;
     }

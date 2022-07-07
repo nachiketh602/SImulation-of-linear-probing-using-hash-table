@@ -1,6 +1,5 @@
 #include "graphics.hpp"
 void drawPixel(int m, int n) {
-  glColor3ub(255, 200, 106);
   glBegin(GL_POINTS);
   glVertex2i(m, n);
   glEnd();
@@ -58,7 +57,7 @@ void renderRectangle(int x, int y, int width, int height) {
 }
 
 void renderText(string data, int x, int y) {
-  glRasterPos2i(x + 20, y + 15);
+  glRasterPos2i(x + 10, y + 15);
   for (int i = 0; i < data.length(); i++) {
     glutBitmapCharacter(GLUT_BITMAP_9_BY_15, (int)data[i]);
   }
@@ -71,21 +70,39 @@ Cell::Cell(int x, int y, int width, int height, string data) {
   this->height = height;
   this->data = data;
   this->isHighlighted = false;
-  this->isBordered = true;
+  this->isBordered = false;
 }
 
 Cell::Cell(string data) { this->data = data; }
 
 void Cell::display() {
   if (this->isHighlighted) {
-    glColor3ub(255, 0, 0);
-  }
-  renderRectangle(this->x, this->y, this->width, this->height);
-  if (this->data == "" || this->data == "-1") {
-    // scanfill(this->x, this->y, this->width, this->height);
-    ;
+    if (this->data == "" || this->data == "-1") {
+      glColor3ub(HIGHLIGHT_COLOR);
+      scanfill(this->x, this->y, this->width, this->height);
+      if (this->isBordered) {
+        renderRectangle(this->x, this->y, this->width, this->height);
+      }
+    } else {
+      glColor3ub(HIGHLIGHT_COLOR);
+      if (this->isBordered) {
+        renderRectangle(this->x, this->y, this->width, this->height);
+      }
+      renderText(this->data, this->x, this->y);
+    }
   } else {
-    renderText(this->data, this->x, this->y);
+    if (this->data == "" || this->data == "-1") {
+      glColor3ub(SCANFILL_COLOR);
+      scanfill(this->x, this->y, this->width, this->height);
+      if (this->isBordered) {
+        renderRectangle(this->x, this->y, this->width, this->height);
+      }
+    } else {
+      if (this->isBordered) {
+        renderRectangle(this->x, this->y, this->width, this->height);
+      }
+      renderText(this->data, this->x, this->y);
+    }
   }
   glColor3ub(255, 255, 255);
 }

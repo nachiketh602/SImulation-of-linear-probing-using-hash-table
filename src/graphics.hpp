@@ -1,5 +1,6 @@
 #ifndef GRAPHICS_H_
 #define GRAPHICS_H_
+#include "config.hpp"
 #include <GL/glut.h>
 #include <bits/stdc++.h>
 using namespace std;
