@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
     string ch;
     cout << "\n\n";
     fmt::print(fg(fmt::color::floral_white) | fmt::emphasis::bold,
-               "===MENU===\n1.Insert\n2.Delete\n3.Display\n4.Exit\nEnter your "
+               "===MENU===\n1.Insert\n2.Delete\n3.Search\n4.Display\n5.Exit\nEnter your "
                "choice : ");
     cin >> ch;
     int val = atoi(ch.data());
@@ -54,11 +54,18 @@ int main(int argc, char **argv) {
       h->deleteNode(cells, key);
       break;
     }
-    case 3: {
+    case 3:{
+             string key;
+             cout<< "Enter the key : ";
+             cin>>key;
+             h->get(cells, key);
+             break;
+           }
+    case 4: {
       h->display();
       break;
     }
-    case 4: {
+    case 5: {
       fflush(stdout);
       fmt::print(
           fg(fmt::color::red) | fmt::emphasis::bold,

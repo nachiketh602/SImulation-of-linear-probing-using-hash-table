@@ -23,7 +23,7 @@ public:
   unsigned int hashCode(std::string key);
   void insertNode(Cell *cells[10][4], std::string key, int value);
   int deleteNode(Cell *cells[10][4], std::string key);
-  int get(Cell *cells[10][3], std::string key);
+  int get(Cell *cells[10][4], std::string key);
   int sizeofMap();
   bool isEmpty();
   void display();
